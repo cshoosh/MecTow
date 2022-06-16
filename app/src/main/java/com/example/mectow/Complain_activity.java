@@ -146,28 +146,28 @@ public class Complain_activity extends AppCompatActivity {
         }
 
         if (complain1.getCurrentTextColor() == getResources().getColor(R.color.colorAccent)){
-            reference = FirebaseDatabase.getInstance().getReference("Complain");
+            reference = FirebaseDatabase.getInstance().getReference("Feedback");
             HashMap<String, Object> complain1 = new HashMap<>();
             complain1.put("Customer Complain 1", "The Worker didn't work correctly");
             reference.child(auth.getUid()).updateChildren(complain1);
         }
         if(complain2.getCurrentTextColor() == getResources().getColor(R.color.colorAccent))
         {
-            reference = FirebaseDatabase.getInstance().getReference("Complain");
+            reference = FirebaseDatabase.getInstance().getReference("Feedback");
             HashMap<String, Object> complain1 = new HashMap<>();
             complain1.put("Customer Complain 2", "The Worker didn't take care of his hygienes");
             reference.child(auth.getUid()).updateChildren(complain1);
         }
         if(complain3.getCurrentTextColor() == getResources().getColor(R.color.colorAccent))
         {
-            reference = FirebaseDatabase.getInstance().getReference("Complain");
+            reference = FirebaseDatabase.getInstance().getReference("Feedback");
             HashMap<String, Object> complain1 = new HashMap<>();
             complain1.put("Customer Complain 3", "The Worker was unprofessional");
             reference.child(auth.getUid()).updateChildren(complain1);
         }
         if(complain4.getCurrentTextColor() == getResources().getColor(R.color.colorAccent))
         {
-            reference = FirebaseDatabase.getInstance().getReference("Complain");
+            reference = FirebaseDatabase.getInstance().getReference("Feedback");
             HashMap<String, Object> complain1 = new HashMap<>();
             complain1.put("Customer Complain 4", othdetail.getText().toString());
             reference.child(auth.getUid()).updateChildren(complain1);
