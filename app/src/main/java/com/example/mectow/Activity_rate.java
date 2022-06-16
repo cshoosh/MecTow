@@ -87,13 +87,47 @@ public class Activity_rate extends Activity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+
+                reference = FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid);
+                reference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        id = dataSnapshot.child("mid").getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+                f_rate = (rate + v) / 2;   //For mean rating
+
+                format = new DecimalFormat("0.0");      //For 1 decimal place rating i.e (4.5)
+
+                if (v <= 3) {
+                    Intent intent = new Intent(getApplicationContext(),Complain_activity.class);
+                    intent.putExtra("id" , customerrequestuid);
+                    intent.putExtra("rating",format.format(f_rate));
+                    startActivity(intent);
+                    finishAffinity();
+                } else {
+                    reference = FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid);
+                    HashMap<String, Object> rate = new HashMap<>();
+                    rate.put("rating", format.format(f_rate));
+                    reference.updateChildren(rate);
+
+                    Toast.makeText(getApplicationContext(), "Thank you for the feedback to Kaam Wala", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(),Home_Navigation.class);
+                    startActivity(intent);
+                    finishAffinity();
+                }
+            }
+        });
 
 }
 
-        public void Updaterate (String rated){
-            HashMap<String, Object> rating1 = new HashMap<>();
-            rating1.put("rate", String.valueOf(rated));
-            FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid).updateChildren(rating1);
-        }
 
     }
