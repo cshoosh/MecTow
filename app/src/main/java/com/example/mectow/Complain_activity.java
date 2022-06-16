@@ -1,5 +1,6 @@
 package com.example.mectow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,17 +12,22 @@ import android.widget.Toast;
 
 import com.example.mectow.ui.home.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+
+import static com.example.mectow.user_MapsActivity.customerrequestuid;
 
 public class Complain_activity extends AppCompatActivity {
 
     TextView complain1, complain2, complain3, complain4;
     EditText othdetail;
-    String id, rate;
+    String id, rate,mid;
     DecimalFormat format;
     DatabaseReference reference;
     FirebaseAuth auth;
@@ -34,15 +40,32 @@ public class Complain_activity extends AppCompatActivity {
         setContentView(R.layout.activity_complain_activity);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("ID");
-        rate = intent.getStringExtra("Rating");
+        id = intent.getStringExtra("id");
+        rate = intent.getStringExtra("rating");
         auth = FirebaseAuth.getInstance();
+
 
         complain1 = findViewById(R.id.complain1);
         complain2 = findViewById(R.id.complain2);
         complain3 = findViewById(R.id.complain3);
         complain4 = findViewById(R.id.complain4);
         othdetail = findViewById(R.id.otherdetail);
+
+        reference = FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mid = dataSnapshot.child("mid").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
+
+
 
         complain1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,23 +125,22 @@ public class Complain_activity extends AppCompatActivity {
                 complain2.getCurrentTextColor() == getResources().getColor(R.color.colorAccent) ||
                 complain3.getCurrentTextColor() == getResources().getColor(R.color.colorAccent) ||
                 complain4.getCurrentTextColor() == getResources().getColor(R.color.colorAccent)) {
-            reference = FirebaseDatabase.getInstance().getReference("Customers");
+            reference = FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid);
             HashMap<String, Object> rating = new HashMap<>();
             rating.put("rating", rate);
-            reference.child(id).updateChildren(rating);
+            reference.updateChildren(rating);
 
             //For Complain
-            reference = FirebaseDatabase.getInstance().getReference("Complain");
+            reference = FirebaseDatabase.getInstance().getReference("Feedback");
             HashMap<String, Object> complain = new HashMap<>();
-            complain.put("Customer ID", auth.getUid());
-            complain.put("mechanic id", id);
+            complain.put("complain_id", customerrequestuid);
+            complain.put("mechanic_id", mid);
             complain.put("isUser", "yes");
-            complain.put("status", "unread");
             reference.child(auth.getUid()).setValue(complain);
 
             Toast.makeText(getApplicationContext(), "Thank you for the feedback to Kaam Wala", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(getApplicationContext(), HomeFragment.class);
+            Intent intent = new Intent(getApplicationContext(),Home_Navigation.class);
             startActivity(intent);
             finishAffinity();
         }

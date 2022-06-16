@@ -119,7 +119,7 @@ public class Activity_rate extends Activity {
                     rate.put("rating", format.format(f_rate));
                     reference.updateChildren(rate);
 
-                    Toast.makeText(getApplicationContext(), "Thank you for the feedback to Kaam Wala", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Thank you for the feedback to MecTow", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(),Home_Navigation.class);
                     startActivity(intent);
                     finishAffinity();
