@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.about_us.AboutFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                app:cardCornerRadius="20dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mectow"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    />
+
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MecTow is design for solving some serious issues about vehicles problem in the middle of journey. Many people face sudden technical issues with their vehicle and they don’t know about that area like motorways, highways where they stuck you can have a better peace of mind knowing that we are available whenever you need help"
+                android:padding="5dp"
+                android:fontFamily="serif-monospace"
+                android:textColor="#000000"
+                android:textSize="12dp"
+
+
+                />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/abooot"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif-monospace"
+                android:padding="5dp"
+                android:text="Customer to Mechanic can connect on a single tap.People are facing problem to find good mechanic at road to solve your problem which would take time and effort."
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/aboot2"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We will provide for Customer with honest,best service,instant solution at cheapest rate."
+                android:padding="5dp"
+                android:fontFamily="serif-monospace"
+                android:textColor="#000000"
+                android:textSize="12dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/capture24"
+
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

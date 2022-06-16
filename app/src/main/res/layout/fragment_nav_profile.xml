@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.profile.ProfileFragment"
+    android:background="#FFFFFF">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilpic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/model"
+            android:elevation="3dp"
+
+            />
+
+
+
+        <GridLayout
+            android:id="@+id/header_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:layout_marginTop="-70dp"
+            android:columnCount="1"
+            android:columnOrderPreserved="false">
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                app:cardElevation="6dp"
+                app:cardCornerRadius="12dp"
+                android:layout_margin="12dp"
+                >
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="#1e3d59"
+                    >
+                    <ImageView
+                        android:id="@+id/profileimg"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/profile"
+                        android:layout_marginStart="20dp"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/textname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ToobaZareen"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:includeFontPadding="false"
+                        android:layout_toRightOf="@+id/profileimg"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"/>
+                    <ImageView
+                        android:id="@+id/emailimg"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/emailprof"
+                        android:layout_marginStart="100dp"
+                        android:layout_toRightOf="@id/textname"
+                        android:layout_centerVertical="true"/>
+                    <TextView
+                        android:id="@+id/updateemail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ToobaZareen"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:includeFontPadding="false"
+                        android:layout_toRightOf="@+id/emailimg"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        />
+
+
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_marginTop="-80dp"
+
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="12dp"
+                android:layout_margin="10dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/rating"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:id="@+id/ratinglabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rewards"
+                        android:paddingTop="20dp"
+                        android:includeFontPadding="false"
+                        android:textSize="20sp"
+                        android:textColor="@android:color/black"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="12dp"
+                android:layout_margin="10dp"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/rating"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:id="@+id/ratinglabel2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rating"
+                        android:paddingTop="20dp"
+                        android:includeFontPadding="false"
+                        android:textSize="20sp"
+                        android:textColor="@android:color/black"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:elevation="20dp"
+            android:background="@drawable/cardcolor"
+            android:layout_margin="12dp"
+            >
+            <RelativeLayout
+                android:id="@+id/fullnameprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="10dp">
+                <EditText
+                    android:id="@+id/updatename"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="name"
+                    android:drawableLeft="@drawable/user"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/updatephonenumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/updatename"
+                    android:layout_marginTop="20dp"
+                    android:drawableLeft="@drawable/phone"
+                    android:hint="03**-1234567"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/updatebtn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/update"
+                android:clickable="true"
+                android:textColor="@android:color/white"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>
