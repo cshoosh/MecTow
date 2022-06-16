@@ -46,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -71,15 +72,15 @@ import java.util.Locale;
 
 import static android.view.View.GONE;
 
-public class user_MapsActivity extends FragmentActivity implements OnMapReadyCallback , LocationListener , RoutingListener {
+public class user_MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, RoutingListener {
     GoogleMap mMap, mMap2;
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient fusedLocationProviderClient;
     Double lat, lng;
     FirebaseAuth auth;
-    String call ="";
+    String call = "";
     public static String servicetype;
-    double totalcharges=0;
+    double totalcharges = 0;
     public static String mechanic_id;
     private List<Polyline> polylines;
     String type;
@@ -88,9 +89,10 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
     static RippleBackground mRippleBg;
     LottieAnimationView message, calldial;
     private static final int[] COLORS = new int[]{R.color.PolyBlue};
-    public  static String customerrequestuid;
+    public static String customerrequestuid;
     Button searchworker;
-    Double customerlat , customerlng , mechaniclat , mechaniclng;
+    Double customerlat, customerlng, mechaniclat, mechaniclng;
+    Marker mWorkerMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +151,7 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+call));
+                intent.setData(Uri.parse("tel:" + call));
                 startActivity(intent);
             }
         });
@@ -184,9 +186,9 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
         data.put("lng", lng.toString());
         data.put("charges", charges);
         data.put("type", "mechanic");
-        data.put("date",new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date()));
-        data.put("time" , Calendar.getInstance().getTime().toString());
-        servicetype= "mechanic";
+        data.put("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date()));
+        data.put("time", Calendar.getInstance().getTime().toString());
+        servicetype = "mechanic";
 
         reference.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -354,8 +356,8 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
         data.put("lat", lat.toString());
         data.put("lng", lng.toString());
         data.put("type", "cartow");
-        data.put("date",new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date()));
-        data.put("time" , Calendar.getInstance().getTime().toString());
+        data.put("date", new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date()));
+        data.put("time", Calendar.getInstance().getTime().toString());
         servicetype = "cartow";
 
         reference.setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -399,8 +401,43 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
                             if (auth.getUid().equals(uid)) {
                                 if (dataSnapshot.child("mid").exists()) {
                                     mechanic_id = dataSnapshot.child("mid").getValue().toString();
+                                    DatabaseReference workerStateReference = FirebaseDatabase.getInstance().getReference("WorkerState");
+                                    ValueEventListener listener = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                            double lat = Double.valueOf(snapshot.child("latitude").getValue().toString());
+                                            double lng = Double.valueOf(snapshot.child("longitude").getValue().toString());
+
+                                            LatLng latLong = new LatLng(lat, lng);
+                                            MarkerOptions options = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLong);
+                                            mMap2.animateCamera(CameraUpdateFactory.newLatLngZoom(latLong, 10));
+                                            if (mWorkerMarker == null) {
+                                                mWorkerMarker = mMap2.addMarker(options);
+                                            }
+
+                                            mWorkerMarker.setPosition(latLong);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    };
+
+                                    if (
+                                            dataSnapshot.child("state").getValue().toString().equals("moving") ||
+                                                    dataSnapshot.child("state").getValue().toString().equals("arrived") ||
+                                                    dataSnapshot.child("state").getValue().toString().equals("startworking")
+                                    ) {
+                                        workerStateReference.child(mechanic_id).addValueEventListener(listener);
+                                    } else if (dataSnapshot.child("state").getValue().toString().equals("end")) {
+                                        workerStateReference.removeEventListener(listener);
+                                        workerStateReference.child("state").setValue("free");
+                                    }
+
                                     uperBox.setVisibility(View.VISIBLE);
-                                    if(dataSnapshot.child("charges").exists()) {
+                                    if (dataSnapshot.child("charges").exists()) {
                                         String charge = dataSnapshot.child("charges").getValue().toString();
                                         charges_field.setText(charge);
                                     }
@@ -420,9 +457,6 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
 
                                         }
                                     });
-
-
-
                                 }
                             }
                         }
@@ -459,9 +493,9 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         mechaniclat = Double.valueOf(snapshot.child("latitude").getValue().toString());
                         mechaniclng = Double.valueOf(snapshot.child("longitude").getValue().toString());
-                        LatLng customerlatlng = new LatLng(customerlat , customerlng);
-                        LatLng mechaniclatlng = new LatLng(mechaniclat , mechaniclng);
-                        getRouteToMarker(customerlatlng , mechaniclatlng);
+                        LatLng customerlatlng = new LatLng(customerlat, customerlng);
+                        LatLng mechaniclatlng = new LatLng(mechaniclat, mechaniclng);
+                        getRouteToMarker(customerlatlng, mechaniclatlng);
                     }
 
                     @Override
@@ -475,7 +509,8 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
     public void onLocationChanged(@NonNull Location location) {
 
     }
-    private void getRouteToMarker(LatLng starting , LatLng ending) {
+
+    private void getRouteToMarker(LatLng starting, LatLng ending) {
 
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.DRIVING)
@@ -489,10 +524,10 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
 
     @Override
     public void onRoutingFailure(RouteException e) {
-        if(e != null) {
+        if (e != null) {
             Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(getApplicationContext() , "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -504,7 +539,7 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
 
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortindex) {
-        if(polylines.size()>0) {
+        if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
             }
@@ -512,7 +547,7 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
 
         polylines = new ArrayList<>();
         //add route(s) to the map.
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes
             int colorIndex = i % COLORS.length;
@@ -528,9 +563,8 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
 
             if (servicetype == "mechanic") {
                 totalcharges = ((30 * (Double.parseDouble(String.valueOf(route.get(i).getDistanceValue())))) + (Double.parseDouble(charges_field.getText().toString())));
-            }
-            else if(servicetype == "cartow"){
-                totalcharges = ((30 * (Double.parseDouble(String.valueOf(route.get(i).getDistanceValue()))))+ 400);
+            } else if (servicetype == "cartow") {
+                totalcharges = ((30 * (Double.parseDouble(String.valueOf(route.get(i).getDistanceValue())))) + 400);
             }
         }
     }
@@ -539,8 +573,9 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
     public void onRoutingCancelled() {
 
     }
-    public  void getNotifications(String complaintId){
-        if(complaintId!=null) {
+
+    public void getNotifications(String complaintId) {
+        if (complaintId != null) {
             DatabaseReference datareff = FirebaseDatabase.getInstance().getReference("Complaint").child(complaintId);
             datareff.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -634,13 +669,13 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
                         if (dataSnapshot.child("state").getValue().equals("end")) {
 
                             DatabaseReference reff = (DatabaseReference) FirebaseDatabase.getInstance().getReference("Complaint").child(customerrequestuid);
-                            HashMap<String , Object> updateData =new HashMap<>();
+                            HashMap<String, Object> updateData = new HashMap<>();
                             updateData.put("state", "view");
 
                             reff.updateChildren(updateData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Intent intent = new Intent(getApplicationContext() , Activity_rate.class);
+                                    Intent intent = new Intent(getApplicationContext(), Activity_rate.class);
                                     startActivity(intent);
 
 
