@@ -433,7 +433,7 @@ public class user_MapsActivity extends FragmentActivity implements OnMapReadyCal
                                         workerStateReference.child(mechanic_id).addValueEventListener(listener);
                                     } else if (dataSnapshot.child("state").getValue().toString().equals("end")) {
                                         workerStateReference.removeEventListener(listener);
-                                        workerStateReference.child("state").setValue("free");
+                                        workerStateReference.child(mechanic_id).child("state").setValue("free");
                                     }
 
                                     uperBox.setVisibility(View.VISIBLE);
